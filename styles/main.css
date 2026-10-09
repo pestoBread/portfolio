@@ -10,19 +10,20 @@
    COLORS / SETTINGS
    ========================================================================== */
 :root {
-  --color-white: #f6f8f1;
-  --color-black: #323531;
-  --color-primary: #667554;
-  --color-dark: #434d37;
-  --color-bg: #9aad82;
-  --color-bg-2: #cacec5;
-  --color-surface: #dddfdb;
-  --shadow-str: .2;
+  --hue: 128;
+  --color-white: oklch(1 0 0);
+  --color-black: oklch(0 0 0);
+  --color-primary: oklch(0.5 0.07 var(--hue));
+  --color-dark: oklch(0.38 0.038 var(--hue));
+  --color-bg: oklch(0.66 0.084 var(--hue));
+  --color-bg-2: oklch(0.845 0.01 var(--hue));
+  --color-surface: oklch(0.90 0.006 var(--hue));
+  --shadow-str: .24;
   --shadow-str-light: calc(var(--shadow-str) * 0.7);
-  --color-shadow: rgba(8, 20, 0, var(--shadow-str));
-  --color-shadow-light: rgba(8, 20, 0, var(--shadow-str-light));
-  --color-highlight: rgba(255, 255, 255, var(--shadow-str));
-  --color-highlight-light: rgba(255, 255, 255, var(--shadow-str-light));
+  --color-shadow: oklch(0.17 0.048 var(--hue) / var(--shadow-str));
+  --color-shadow-light: oklch(0.17 0.048 var(--hue) / var(--shadow-str-light));
+  --color-highlight: oklch(1 0 0 / var(--shadow-str));
+  --color-highlight-light: oklch(1 0 0 / var(--shadow-str-light));
 }
 
 ::-moz-selection {
@@ -417,7 +418,6 @@ body {
   font-family: var(--font-primary);
   font-size: var(--font-size-content);
   color: var(--color-black);
-  line-height: 1.6;
   background-color: var(--color-bg);
 }
 
@@ -533,10 +533,15 @@ a * {
 
 .button.active {
   background-color: var(--color-primary);
-  color: var(--color-surface);
+  color: var(--color-white);
 }
 .button.active::before {
-  background-color: var(--color-surface);
+  background-color: var(--color-white);
+}
+
+p > a {
+  text-decoration: none;
+  color: var(--color-primary);
 }
 
 /* ==========================================================================
@@ -587,7 +592,6 @@ ul {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  gap: var(--spacing-3x);
 }
 
 .main {
@@ -617,6 +621,11 @@ ul {
   background-color: var(--color-bg-2);
 }
 
+.surface-xs {
+  padding: var(--spacing-2x) var(--spacing-3x);
+  background-color: var(--color-bg-2);
+}
+
 .subdivision {
   background-color: var(--color-bg);
   padding: var(--spacing-4x);
@@ -624,6 +633,7 @@ ul {
 }
 
 .visit {
+  pointer-events: none;
   font-size: clamp(1rem, 0.42vw + 0.88rem, 1.25rem);
   font-weight: 600;
   color: var(--color-black);
@@ -636,6 +646,7 @@ ul {
   bottom: var(--spacing-3x);
   right: var(--spacing-3x);
   line-height: 1;
+  transition: all 0.1s ease-out;
 }
 
 @media (width < 768px) {
@@ -669,6 +680,11 @@ ul {
   min-height: 0;
 }
 
+.grow-2,
+.img__container.grow-2 {
+  flex: 2;
+}
+
 .flex-space-between {
   justify-content: space-between;
   align-items: end;
@@ -682,6 +698,10 @@ ul {
     flex-direction: row;
   }
 }
+.nowrap {
+  text-wrap: nowrap;
+}
+
 header {
   order: 1;
 }
@@ -694,6 +714,19 @@ header {
   flex-direction: column;
   gap: var(--spacing-9x);
   overflow-y: scroll;
+  padding: 0 var(--spacing-3x);
+}
+.header__content::-webkit-scrollbar-thumb {
+  background-color: blue;
+  border-radius: red;
+}
+.header__content::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.header__content::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background-color: transparent;
 }
 
 .nav__links,
@@ -791,6 +824,7 @@ header {
   box-shadow: var(--embossed);
   padding: 0 var(--spacing-2x);
   font-size: clamp(1rem, 0.42vw + 0.88rem, 1.25rem);
+  transition: all 0.1s ease-out;
 }
 .menu-toggle__container label:hover::after {
   cursor: pointer;
@@ -800,6 +834,9 @@ header {
 .menu-toggle__container input:checked + label::after {
   content: "Fermer";
   box-shadow: var(--debossed);
+}
+.menu-toggle__container input:checked + label:hover::after {
+  box-shadow: var(--embossed);
 }
 
 @media (width < 1024px) {
@@ -856,13 +893,12 @@ li:has(> .nav__projects) {
 .nav__projects p {
   display: flex;
   align-items: center;
-  overflow: hidden;
   font-size: 0.88rem;
   background-color: var(--color-surface);
   border-radius: var(--border-radius);
   width: 100%;
   height: 100%;
-  padding: var(--spacing-1x-5);
+  padding: 0 var(--spacing-1x-5);
 }
 .nav__projects p:hover {
   background-color: var(--color-white);
@@ -870,7 +906,7 @@ li:has(> .nav__projects) {
 }
 .nav__projects a.active p {
   background-color: var(--color-primary);
-  color: var(--color-surface);
+  color: var(--color-white);
 }
 
 .img__container {
@@ -901,7 +937,7 @@ li:has(> .nav__projects) {
   font-size: clamp(0.75rem, 0.42vw + 0.63rem, 1rem);
   bottom: var(--spacing-3x);
   right: var(--spacing-3x);
-  padding: 0 var(--spacing-1x-5);
+  padding: 2px var(--spacing-1x-5) 1px;
   background-color: var(--color-surface);
   border-radius: var(--border-radius);
 }
@@ -1018,6 +1054,10 @@ section.contact {
   flex-grow: 1;
 }
 
+.video {
+  border-radius: var(--border-radius);
+}
+
 :root {
   --border-radius: var(--spacing-1x);
   --aaa: 1.75px;
@@ -1038,13 +1078,6 @@ section.contact {
       var(--bbb) var(--bbb) var(--aaa) 0 var(--color-shadow-light),
       var(--aaa) var(--aaa) var(--aaa) 0 var(--color-highlight),
       inset var(--aaa) var(--aaa) var(--aaa) 0 var(--color-shadow);
-  --debossed-sharp:
-      inset var(--dbb) var(--dbb) var(--daa) 0 var(--color-highlight),
-      inset var(--daa) var(--daa) var(--daa) 0 transparent,
-      var(--aaa) var(--aaa) var(--aaa) 0 transparent,
-      var(--bbb) var(--bbb) var(--aaa) 0 transparent,
-      var(--aaa) var(--aaa) var(--aaa) 0 transparent,
-      inset var(--daa) var(--daa) var(--daa) 0 var(--color-shadow);
 }
 
 .subdivision,
@@ -1088,14 +1121,12 @@ a:hover .embossed::after,
 
 .button,
 .embossed,
-.debossed,
-.img__container {
+.debossed {
   position: relative;
 }
 .button::after,
 .embossed::after,
-.debossed::after,
-.img__container::after {
+.debossed::after {
   content: "";
   position: absolute;
   inset: 0;
